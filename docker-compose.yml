@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  langchain-psql:
+    labels:
+      br.dev.multicode.author: "Andre Ferreira <andre.dev.linux@gmail.com>"
+      br.dev.multicode.license: "MIT"
+    image: pgvector/pgvector:pg18-trixie
+    container_name: langchain-psql
+    restart: unless-stopped
+    shm_size: 1g
+    environment:
+      POSTGRES_USER: mba_user
+      POSTGRES_PASSWORD: myPassword123!
+      POSTGRES_DB: mba
+    ports:
+      - "5432:5432"
+    volumes:
+      - type: bind
+        source: ./.docker/docker-entrypoint-initdb.d/initial-database.sh
+        target: /docker-entrypoint-initdb.d/init-user-db.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
