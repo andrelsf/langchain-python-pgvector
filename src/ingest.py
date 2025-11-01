@@ -2,6 +2,8 @@
 # flake8: noqa E501
 from os import path
 from langchain_openai import OpenAIEmbeddings
+from src.repository.database import VectorStore
+from langchain_core.documents import Document
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_classic.text_splitter import RecursiveCharacterTextSplitter
 
@@ -18,13 +20,7 @@ def loading_pdf_content(pdf_name: str):
         return []
 
 
-def build_embeddings(chunks: list):
-    embeddings = []
-    embeddings_model = OpenAIEmbeddings()
-    for chunk in chunks:
-        vector = embeddings_model.embed_query(chunk.page_content)
-        embeddings.append({
-            "text": chunk.page_content,
-            "embedding": vector
-        })
-    return embeddings
+def register(documents: list[Document]):
+    print("Registering embeddings...")
+    vectorstore = VectorStore()
+    vectorstore.persist_documents(documents)
