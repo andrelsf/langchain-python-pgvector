@@ -6,6 +6,7 @@ from src.utils.variables import Variables
 from langchain_core.documents import Document
 from langchain_openai import OpenAIEmbeddings
 from langchain_postgres import PGVectorStore
+from langchain_community.vectorstores import DistanceStrategy
 from langchain_google_genai.embeddings import GoogleGenerativeAIEmbeddings
 
 
@@ -35,7 +36,18 @@ class VectorStore:
         await self._vector_store_openai.aadd_documents(documents_openai)
         await self._vector_store_google.aadd_documents(documents_google)
 
+    def build_retriever(self):
+        openai_as_retriever = self._vector_store_openai.as_retriever(
+            search_type="similarity",
+            search_kwargs={"k": self._amount_results}
+        )
+        return openai_as_retriever
+
     async def similarity_search(self, query: str):
         openai_result = await self._vector_store_openai.asimilarity_search_with_score(query, k=self._amount_results)
         google_result = await self._vector_store_google.asimilarity_search_with_score(query, k=self._amount_results)
         return openai_result + google_result
+
+    async def question(self, query: str):
+        results = await self.similarity_search(query)
+        return results
