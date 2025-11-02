@@ -7,3 +7,7 @@ load_dotenv()
 OPENAI_API_KEY = environ.get("OPENAI_API_KEY", None)
 if OPENAI_API_KEY is None:
   raise ValueError("A variável de ambiente OPENAI_API_KEY não está definida.")
+
+GOOGLE_API_KEY = environ.get("GOOGLE_API_KEY", None)
+if GOOGLE_API_KEY is None:
+  raise ValueError("A variável de ambiente GOOGLE_API_KEY não está definida.")
