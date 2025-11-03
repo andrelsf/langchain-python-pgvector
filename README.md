@@ -8,6 +8,7 @@ Ingestão e Busca Semântica com LangChain e PostgreSQL com extensao pgVector
 - Docker Compose (docker-compose.yml)
 - Python3.12
 - Terminal Linux/GitBash (Windows) - (uso do makefile)
+- API Keys OPENAI e GOOGLE
 
 ## Como usar
 
@@ -55,6 +56,7 @@ python3 init_search.py
 ```shell
 python3 init_chat.py
 ```
+> **NOTA**: PDF carregado trata-se de COMISSÃO DE VALORES MOBILIÁRIOS form-10k referente a marca Nike
 
 > **Nota**: para desativar o virtualEnv do Python basta usar o cmd `deactivate`
 
