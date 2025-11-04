@@ -9,7 +9,7 @@ RESPONSES = ["Desculpe, não sei a resposta.", "I don't know.", "Não sei."]
 
 
 vector_store = VectorStore()
-llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
+llm = ChatOpenAI(model="gpt-5-nano", temperature=0.3)
 
 # Memória da conversa
 memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
