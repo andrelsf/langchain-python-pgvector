@@ -6,7 +6,6 @@ from src.utils.variables import Variables
 from langchain_core.documents import Document
 from langchain_openai import OpenAIEmbeddings
 from langchain_postgres import PGVectorStore
-from langchain_community.vectorstores import DistanceStrategy
 from langchain_google_genai.embeddings import GoogleGenerativeAIEmbeddings
 
 
