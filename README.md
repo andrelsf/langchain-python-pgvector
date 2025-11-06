@@ -58,13 +58,11 @@ python3 init_chat.py
 ```
 
 **Peguntas para chat:**
-- `Resuma o conteudo deste documento da Nike?`
+- `Resuma o este documento?`
 - `Qual é a capital da França?`
-- `Quantos clientes temos em 2024?`
-- `Você acha isso bom ou ruim?`
 
 
-![Init Chat](./docs/init_chat.png)
+![Init Chat](./docs/chat.png)
 
 
 > **NOTA**: PDF carregado trata-se de COMISSÃO DE VALORES MOBILIÁRIOS form-10k referente a marca Nike

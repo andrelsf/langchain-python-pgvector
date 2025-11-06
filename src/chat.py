@@ -1,5 +1,6 @@
 # src/chat.py
 # flake8: noqa E501
+from asyncio import run
 from langchain_openai import ChatOpenAI
 from src.repository.database import VectorStore
 from langchain_core.prompts import ChatPromptTemplate
@@ -16,15 +17,32 @@ llm = ChatOpenAI(
     use_responses_api=False
 )
 
-system_prompt = (
-    "Você é um assistente para tarefas de perguntas e respostas somente do retriever PDF Nike. "
-    "Use os seguintes trechos de contexto recuperado para responder "
-    "à pergunta. Se você não souber a resposta, diga que "
-    "não tenho informações necessárias para responder sua pergunta.. "
-    "Use no máximo três frases e mantenha a resposta concisa."
-    "\n\n"
-    "{context}"
-)
+system_prompt = ("""
+CONTEXTO:
+{context}
+
+REGRAS:
+- Responda somente com base no CONTEXTO.
+- Se a informação não estiver explicitamente no CONTEXTO, responda:
+"Não tenho informações necessárias para responder sua pergunta."
+- Nunca invente ou use conhecimento externo.
+- Nunca produza opiniões ou interpretações além do que está escrito.
+
+EXEMPLOS DE PERGUNTAS FORA DO CONTEXTO:
+Pergunta: "Qual é a capital da França?"
+Resposta: "Não tenho informações necessárias para responder sua pergunta."
+
+Pergunta: "Quantos clientes temos em 2024?"
+Resposta: "Não tenho informações necessárias para responder sua pergunta."
+
+Pergunta: "Você acha isso bom ou ruim?"
+Resposta: "Não tenho informações necessárias para responder sua pergunta."
+
+PERGUNTA DO USUÁRIO:
+{input}
+
+RESPONDA A "PERGUNTA DO USUÁRIO"
+""")
 
 prompt = ChatPromptTemplate.from_messages(
     [
@@ -43,7 +61,9 @@ def chat():
         user_question = input("\nChat: ")
         if user_question.lower() in ["sair", "exit", "quit"]:
             break
-        response = rag_chain.invoke({"input": user_question})
+        docs = run(vector_store.similarity_search(user_question))
+        context = "\n".join([doc.page_content for doc, _ in docs])
+        response = rag_chain.invoke({"context": context, "input": user_question})
         answer = response.get('answer')
         if answer in RESPONSES or answer is None:
             print("Não tenho informações necessárias para responder sua pergunta.")
