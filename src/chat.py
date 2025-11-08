@@ -44,16 +44,11 @@ PERGUNTA DO USUÁRIO:
 RESPONDA A "PERGUNTA DO USUÁRIO"
 """)
 
-prompt = ChatPromptTemplate.from_messages(
-    [
-        ("system", system_prompt),
-        ("human", "{input}"),
-    ]
-)
+prompt = ChatPromptTemplate.from_messages([("system", system_prompt),("human", "{input}")])
 
 # Criar o chain de resposta de perguntas
 question_answer_chain = create_stuff_documents_chain(llm, prompt)
-rag_chain = create_retrieval_chain(vector_store.build_retriever(), question_answer_chain)
+chain = create_retrieval_chain(vector_store.build_retriever(), question_answer_chain)
 
 def chat():
     print("💬 Chat.\nDigite 'sair|exit|quit' para encerrar.")
@@ -63,7 +58,7 @@ def chat():
             break
         docs = run(vector_store.similarity_search(user_question))
         context = "\n".join([doc.page_content for doc, _ in docs])
-        response = rag_chain.invoke({"context": context, "input": user_question})
+        response = chain.invoke({"context": context, "input": user_question})
         answer = response.get('answer')
         if answer in RESPONSES or answer is None:
             print("Não tenho informações necessárias para responder sua pergunta.")
