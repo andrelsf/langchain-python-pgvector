@@ -15,7 +15,7 @@ def loading_pdf_content(pdf_name: str) -> tuple[list[Document], list[Document]]:
         contents = PyPDFLoader(file_path).load()
         documents_openai = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=150) \
             .split_documents(contents)
-        documents_google = RecursiveCharacterTextSplitter(chunk_size=768, chunk_overlap=150) \
+        documents_google = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=150) \
             .split_documents(contents)
         return documents_openai, documents_google
     except Exception as ex:
